@@ -3,8 +3,74 @@
 Release notes
 =============
 
-1.1.0
------
+1.1.2 (2016-08-18)
+------------------
+
+Bug fixes
+~~~~~~~~~
+
+- Introduce a missing :setting:`IMAGES_STORE_S3_ACL` setting to override
+  the default ACL policy in ``ImagesPipeline`` when uploading images to S3
+  (note that default ACL policy is "private" -- instead of "public-read" --
+  since Scrapy 1.1.0)
+- :setting:`IMAGES_EXPIRES` default value set back to 90
+  (the regression was introduced in 1.1.1)
+
+
+1.1.1 (2016-07-13)
+------------------
+
+Bug fixes
+~~~~~~~~~
+
+- Add "Host" header in CONNECT requests to HTTPS proxies (:issue:`2069`)
+- Use response ``body`` when choosing response class
+  (:issue:`2001`, fixes :issue:`2000`)
+- Do not fail on canonicalizing URLs with wrong netlocs
+  (:issue:`2038`, fixes :issue:`2010`)
+- a few fixes for ``HttpCompressionMiddleware`` (and ``SitemapSpider``):
+
+  - Do not decode HEAD responses (:issue:`2008`, fixes :issue:`1899`)
+  - Handle charset parameter in gzip Content-Type header
+    (:issue:`2050`, fixes :issue:`2049`)
+  - Do not decompress gzip octet-stream responses
+    (:issue:`2065`, fixes :issue:`2063`)
+
+- Catch (and ignore with a warning) exception when verifying certificate
+  against IP-address hosts (:issue:`2094`, fixes :issue:`2092`)
+- Make ``FilesPipeline`` and ``ImagesPipeline`` backward compatible again
+  regarding the use of legacy class attributes for customization
+  (:issue:`1989`, fixes :issue:`1985`)
+
+
+New features
+~~~~~~~~~~~~
+
+- Enable genspider command outside project folder (:issue:`2052`)
+- Retry HTTPS CONNECT ``TunnelError`` by default (:issue:`1974`)
+
+
+Documentation
+~~~~~~~~~~~~~
+
+- ``FEED_TEMPDIR`` setting at lexicographical position (:commit:`9b3c72c`)
+- Use idiomatic ``.extract_first()`` in overview (:issue:`1994`)
+- Update years in copyright notice (:commit:`c2c8036`)
+- Add information and example on errbacks (:issue:`1995`)
+- Use "url" variable in downloader middleware example (:issue:`2015`)
+- Grammar fixes (:issue:`2054`, :issue:`2120`)
+- New FAQ entry on using BeautifulSoup in spider callbacks (:issue:`2048`)
+- Add notes about scrapy not working on Windows with Python 3 (:issue:`2060`)
+- Encourage complete titles in pull requests (:issue:`2026`)
+
+Tests
+~~~~~
+
+- Upgrade py.test requirement on Travis CI and Pin pytest-cov to 2.2.1 (:issue:`2095`)
+
+
+1.1.0 (2016-05-11)
+------------------
 
 This 1.1 release brings a lot of interesting features and bug fixes:
 
@@ -69,14 +135,13 @@ you can run spiders on Python 3.3, 3.4 and 3.5 (Twisted >= 15.5 required). Some
 features are still missing (and some may never be ported).
 
 
-Almost all builtin extensions/middlewares are expected to work. However, we are aware of
-some limitations in Python 3:
+Almost all builtin extensions/middlewares are expected to work.
+However, we are aware of some limitations in Python 3:
 
-- Scrapy doesn't work yet in Windows with Python 3 (non-Python 3 ported Twisted dependency)
-- Sending emails is not supported (non-Python 3 ported Twisted dependency)
-- FTP download handler is not supported (non-Python 3 ported Twisted
-  dependency)
-- Telnet is not supported (non-Python 3 ported Twisted dependency)
+- Scrapy does not work on Windows with Python 3
+- Sending emails is not supported
+- FTP download handler is not supported
+- Telnet console is not supported
 
 Additional New Features and Enhancements
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -188,12 +253,18 @@ Bugfixes
 - Various logging related fixes (:issue:`1294`, :issue:`1419`, :issue:`1263`,
   :issue:`1624`, :issue:`1654`, :issue:`1722`, :issue:`1726` and :issue:`1303`).
 - Fixed bug in ``utils.template.render_templatefile()`` (:issue:`1212`).
-- Fixed bug with filestorage HTTP cache checking wrong modified time (:issue:`1875`).
-- ``RetryMiddleware`` is now robust to non-standard HTTP status codes
-  (:issue:`1857`).
 - sitemaps extraction from ``robots.txt`` is now case-insensitive (:issue:`1902`).
 - HTTPS+CONNECT tunnels could get mixed up when using multiple proxies
   to same remote host (:issue:`1912`).
+
+
+1.0.6 (2016-05-04)
+------------------
+
+- FIX: RetryMiddleware is now robust to non-standard HTTP status codes (:issue:`1857`)
+- FIX: Filestorage HTTP cache was checking wrong modified time (:issue:`1875`)
+- DOC: Support for Sphinx 1.4+ (:issue:`1893`)
+- DOC: Consistency in selectors examples (:issue:`1869`)
 
 
 1.0.5 (2016-02-04)
